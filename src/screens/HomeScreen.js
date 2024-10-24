@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, StatusBar, FlatList } from 'react-native';
 import PixButton from '../components/PixButton';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import BalanceContext from '../context/BalanceContext';
@@ -9,8 +9,16 @@ import SearchBar from '../components/SearchBar';
 const HomeScreen = ({ navigation }) => {
   const { balance } = useContext(BalanceContext);
 
+  const transactions = [
+    { id: '1', description: 'Pagamento de Luz', amount: -150.00 },
+    { id: '2', description: 'Salário', amount: 1500.00 },
+    { id: '3', description: 'Compras', amount: -120.00 },
+  ];
+
   return (
     <View style={styles.container}>
+      <StatusBar barStyle="dark-content" backgroundColor="#F5F5F5" />
+
       <View style={styles.header}>
         <Text style={styles.headerText}>Bem-vindo ao PicPay</Text>
       </View>
@@ -37,14 +45,23 @@ const HomeScreen = ({ navigation }) => {
         </View>
       </ScrollView>
 
-      <PixButton navigation={navigation} />
+      <FlatList
+        data={transactions}
+        keyExtractor={item => item.id}
+        renderItem={({ item }) => (
+          <View style={styles.transactionItem}>
+            <Text style={{ color: item.amount < 0 ? 'red' : 'green' }}>{item.description}</Text>
+            <Text style={{ color: item.amount < 0 ? 'red' : 'green' }}>R$ {item.amount.toFixed(2)}</Text>
+          </View>
+        )}
+      />
 
+      <PixButton navigation={navigation} />
       <Footer navigation={navigation} />
     </View>
   );
 };
 
-// Estilos
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -86,6 +103,7 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   carouselItem: {
+    marginBottom: 30,
     width: 100,
     height: 100,
     backgroundColor: '#FFFFFF',
@@ -98,6 +116,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 3,
+  },
+  transactionItem: {
+    padding: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
   },
 });
 
