@@ -1,20 +1,33 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import HomeScreen from './src/screens/HomeScreen';
+import PixScreen from './src/screens/PixScreen';import BalanceContext from './src/context/BalanceContext';
+
+const Stack = createStackNavigator();
 
 export default function App() {
+  const [balance, setBalance] = useState(300.00);
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <BalanceContext.Provider value={{ balance, setBalance }}>
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="PIX" component={PixScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </BalanceContext.Provider>
+    
   );
+
+  
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+
+
+
+
+
+
+
